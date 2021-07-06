@@ -83,22 +83,9 @@ class _StoreState extends State<Store> {
     "Butterscotch",
     "Blueberry"
   ];
-  /*if (_response != null){
-    if(_response.weatherInfo.description == 'clear sky') {
-      bgImg = 'assets/sunny.jpg';
-    } else if(_response.weatherInfo.description == 'dust') {
-      bgImg = 'assets/night.jpg';
-    } else if(_response.weatherInfo.description == 'Rainy') {
-      bgImg = 'assets/rainy.jpg';
-    } else if(_response.weatherInfo.description == 'haze') {
-      bgImg = 'assets/cloudy.jpeg';
-    }}
-    else{
-
-    bgImg = 'assets/cloudy.jpeg';}*/
   int flavindex = 1;
   int imgindx = 1;
-  
+
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -113,32 +100,34 @@ class _StoreState extends State<Store> {
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
-              Text("Pokemon Ice-cream!",
+              Text("Pokemon Ice-cream!!🍨",
                   style: TextStyle(
-                      fontSize: 35,
-                      color: Colors.pink[600],
+                      fontSize: 28,
+                      color: Colors.pink,
                       fontWeight: FontWeight.bold)),
               Padding(
-                padding: EdgeInsets.only(top: 35),
+                padding: EdgeInsets.only(top: 20),
               ),
               Container(
                 child: CarouselSlider(
-                  options: CarouselOptions(height: 300),
+                  options: CarouselOptions(height: 200, autoPlay: true),
                   items: imgList
                       .map((item) => Container(child: Image.asset(item)))
                       .toList(),
                 ),
               ),
-
-              /*child: Image(
-                  image: AssetImage("images/download.jpg"),
-                  fit: BoxFit.contain,
-                ),*/
               Padding(padding: EdgeInsets.only(top: 30)),
-              Text("Which Ice cream flavour do you want?",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Container(
+                child: Padding(
+                 padding: EdgeInsets.all(5),child:
+                    Text("Select your ice-cream flavour:",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              
               Text(flav[flavindex],
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,color: Colors.red)),
               Padding(
                 padding: EdgeInsets.only(top: 15),
               ),
@@ -148,9 +137,9 @@ class _StoreState extends State<Store> {
                 },
                 child: Text(
                   "Next flavour",
-                  style: TextStyle(fontSize: 28),
+                  style: TextStyle(fontSize: 22),
                 ),
-                color: Colors.yellow[800],
+                color: Colors.orange[600],
                 textColor: Colors.black,
               ),
             ],

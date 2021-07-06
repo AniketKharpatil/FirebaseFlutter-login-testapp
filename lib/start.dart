@@ -1,13 +1,12 @@
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:test_app1/anonymous_login/anaon_sigin_in.dart';
 import 'package:test_app1/anonymous_login/anon_auth.dart';
 import 'package:test_app1/icecream.dart';
 import 'package:test_app1/login.dart';
-import 'package:test_app1/screens/login_ui.dart';
 import 'package:test_app1/sign_up.dart';
-
 
 class Start extends StatefulWidget {
   @override
@@ -15,32 +14,25 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
-final AuthService _auth = AuthService();
-  //final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _auth1 = AuthService();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  //final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  /*Future<UserCredential> googleSignIn() async {
-    GoogleSignIn googleSignIn = GoogleSignIn();
-    GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    if (googleUser != null) {
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      if (googleAuth.idToken != null && googleAuth.accessToken != null) {
-        final AuthCredential credential = GoogleAuthProvider.credential(
-            accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
-
-        final UserCredential user =
-            await _auth.signInWithCredential(credential);
-
-        await Navigator.pushReplacementNamed(context, "/");
-
-        return user;
-      } else {
-        throw StateError('Missing Google Auth Token');
+  checkAuthentication() async {
+    _auth.authStateChanges().listen((user) async {
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, "store");
       }
-    } else
-      throw StateError('Sign in Aborted');
-  }*/
-   final List imgList = [
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.checkAuthentication();
+  }
+  
+  final List imgList = [
     'images/home.jpg',
     'images/one.jpg',
     'images/cafe.png',
@@ -50,23 +42,24 @@ final AuthService _auth = AuthService();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home page"),
-        automaticallyImplyLeading: false,
+        title: Text("Home page",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),automaticallyImplyLeading: false,
       ),
       body: Container(
         alignment: Alignment.center,
         child: Column(
-          children: <Widget>[Padding(
+          children: <Widget>[
+            Padding(
               padding: EdgeInsets.only(top: 15),
             ),
-             Container(
-                child: CarouselSlider(
-                  options: CarouselOptions(height: 300,autoPlay: true),
-                  items: imgList
-                      .map((item) => Container(child: Image.asset(item)))
-                      .toList(),
-                ),
-              ),Padding(
+            Container(child: Image(image: AssetImage('images/cafe.png'),)
+              // child: CarouselSlider(
+              //   options: CarouselOptions(height: 300, autoPlay: true),
+              //   items: imgList
+              //       .map((item) => Container(child: Image.asset(item)))
+              //       .toList(),
+              // ),
+            ),
+            Padding(
               padding: EdgeInsets.only(top: 20),
             ),
             RichText(
@@ -95,21 +88,16 @@ final AuthService _auth = AuthService();
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginUI()),
+                        MaterialPageRoute(builder: (context) => Login()),
                       );
                     },
-                    
-                    
-                    //for connecting to basic login screen,in above path:  put Login() instead of LoginUI, LoginUI is the class created for designed UI
-                    
-                    
                     child: Text(
                       "LOGIN",
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(fontSize: 20),
                     ),
                     color: Colors.orange[800],
                     textColor: Colors.white),
-                    SizedBox(width: 35.0),
+                SizedBox(width: 35.0),
                 RaisedButton(
                     onPressed: () {
                       Navigator.push(
@@ -119,32 +107,32 @@ final AuthService _auth = AuthService();
                     },
                     child: Text(
                       "REGISTER",
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(fontSize: 20),
                     ),
                     color: Colors.orange[800],
                     textColor: Colors.white),
-                   
-                   
               ],
-              
-            ), 
-            RaisedButton(onPressed: () async {
-            dynamic result = await _auth.signInAnon();
-            Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Store()),);
-            if(result == null){
-              print('error signing in');
-            } else {
-              print('signed in');
-              print(result);
-            }
-          }, child: Text(
-                      "sign in anon",
-                      style: TextStyle(fontSize: 22),
-                    ),
-                    color: Colors.orange[800],
-                    textColor: Colors.white),
+            ),Container(child: Padding(padding: EdgeInsets.all(10),child: Text("Don't want to create an account?",style: TextStyle(fontSize: 16),))),
+            RaisedButton(
+                onPressed: () async {
+                  dynamic result = await _auth1.signInAnon();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Store()),
+                  );
+                  if (result == null) {
+                    print('error signing in');
+                  } else {
+                    print('signed in');
+                    print(result);
+                  }
+                },
+                child: Text(
+                  "Sign in as guest",
+                  style: TextStyle(fontSize: 20),
+                ),
+                color: Colors.orange[800],
+                textColor: Colors.white),
           ],
         ),
       ),
